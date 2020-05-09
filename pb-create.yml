@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+  - name: Create project 'test'
+    os_project:
+      state: present
+      name: test
+      description: Test project
+      domain: default
+      enabled: True
+  - name: Create user 'eval'
+    os_user:
+      state: present
+      name: eval
+      password: eval
+      domain: default
+  - name: Grant a 'reader' role on the user 'eval' in the project 'test'
+    os_user_role:
+      user: eval
+      role: reader
+      project: test

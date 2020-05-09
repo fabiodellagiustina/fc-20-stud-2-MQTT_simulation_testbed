@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+  - name: Delete project test
+    os_project:
+      state: absent
+      name: test
+  - name: Delete user eval
+    os_user:
+      state: absent
+      name: eval
