@@ -4,4 +4,4 @@ clouds:
       auth_url: http://10.235.1.102/identity
       username: admin
       password: password
-      os_user_domain_name: Default
+      user_domain_name: Default
