@@ -2,17 +2,18 @@
 - hosts: localhost
   gather_facts: False
   vars:
-    auth:
-      auth_url: http://10.235.1.102/identity
-      username: admin
-      password: password
-      os_user_domain_name: Default
     project_name: test
     member_names: [test_admin,fabio,jaff]
     member_password: password
     reader_name: eval
     reader_password: eval
   tasks:
+  - name: Authenticate as admin
+    os_auth:
+      auth:
+        auth_url: http://10.235.1.102/identity
+        username: admin
+        password: password
   - name: Create project "{{ project_name }}"
     os_project:
       state: present
