@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars:
+    project_name: project
+    project_admin_name: {{ project_name }}_admin
+    project_admin_password: password
+    project_reader_name: eval
+    project_reader_password: eval
+  tasks:
+  - name: Create project "{{ project_name }}"
+    os_project:
+      cloud: admin
+      state: present
+      name: "{{ project_name }}"
+      domain_id: default
+      enabled: True
+  - name: Create user "{{ project_admin_name }}"
+    os_user:
+      cloud: admin
+      state: present
+      name: "{{ project_admin_name }}"
+      password: "{{ project_admin_password }}"
+      domain_id: default
+  - name: Grant member role on the user "{{ project_admin_name }}" in the project "{{ project_name }}"
+    os_user_role:
+      cloud: admin
+      user: "{{ project_admin_name }}"
+      role: member
+      project: "{{ project_name }}"

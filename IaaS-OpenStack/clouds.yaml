@@ -1,3 +1,7 @@
+vars:
+  project_name: project
+  project_admin_name: {{ project_name }}_admin
+  project_admin_password: password
 clouds:
   admin:
     auth:
@@ -5,5 +9,13 @@ clouds:
       username: admin
       password: password
       project_name: admin
+      user_domain_name: Default
+      project_domain_name: Default
+  project_admin:
+    auth:
+      auth_url: http://10.235.1.102/identity
+      username: "{{ project_admin_name }}"
+      password: "{{ project_admin_password }}"
+      project_name: "{{ project_name }}"
       user_domain_name: Default
       project_domain_name: Default
