@@ -10,7 +10,12 @@
   tasks:
   - name: Create project "{{ project_name }}"
     os_project:
-      cloud: admin
+      cloud:
+        auth:
+          auth_url: http://10.235.1.102/identity
+          username: admin
+          password: password
+          os_user_domain_name: Default
       state: present
       name: "{{ project_name }}"
       domain: default
