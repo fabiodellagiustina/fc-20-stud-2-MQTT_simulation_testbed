@@ -26,5 +26,5 @@
     os_image:
       cloud: admin
       state: absent
-      name: ubuntu-18.04-minimal
+      name: "{{ item }}"
     loop: "{{ images }}"
