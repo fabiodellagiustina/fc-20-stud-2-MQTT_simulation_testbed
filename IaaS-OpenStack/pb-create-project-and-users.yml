@@ -1,12 +1,12 @@
 ---
 - hosts: localhost
   gather_facts: False
-  auth:
-    auth_url: http://10.235.1.102/identity
-    username: admin
-    password: password
-    os_user_domain_name: Default
   vars:
+    auth:
+      auth_url: http://10.235.1.102/identity
+      username: admin
+      password: password
+      os_user_domain_name: Default
     project_name: test
     member_names: [test_admin,fabio,jaff]
     member_password: password
