@@ -66,6 +66,26 @@
       is_public: True
       min_disk: 2
       min_ram: 512
+  - name: Create flavor "ubuntu.micro"
+    os_nova_flavor:
+      cloud: admin
+      state: present
+      name: ubuntu.micro
+      flavorid: u1
+      is_public: True
+      vcpus: 1
+      ram: 512
+      disk: 5
+  - name: Create flavor "ubuntu.mini"
+    os_nova_flavor:
+      cloud: admin
+      state: present
+      name: ubuntu.mini
+      flavorid: u2
+      is_public: True
+      vcpus: 1
+      ram: 1024
+      disk: 5
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin

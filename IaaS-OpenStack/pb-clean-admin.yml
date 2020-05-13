@@ -7,6 +7,7 @@
     project_reader_name: eval
     project_users: ["{{ project_admin_name }}","{{ project_reader_name }}"]
     images: [ubuntu-18.04-minimal,ubuntu-18.04-server]
+    flavors: [ubuntu.micro,ubuntu.mini]
   tasks:
   - name: Authenticate as admin
     os_auth:
@@ -28,3 +29,9 @@
       state: absent
       name: "{{ item }}"
     loop: "{{ images }}"
+  - name: Delete flavors
+    os_nova_flavor:
+      cloud: admin
+      state: absent
+      name: "{{ item }}"
+    loop: "{{ flavors }}"
