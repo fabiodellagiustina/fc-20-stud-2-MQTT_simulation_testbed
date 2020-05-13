@@ -36,5 +36,5 @@
   - name: Grant reader role on the reader member
     os_user_role:
       user: "{{ reader_name }}"
-      role: member
+      role: reader
       project: "{{ project_name }}"
