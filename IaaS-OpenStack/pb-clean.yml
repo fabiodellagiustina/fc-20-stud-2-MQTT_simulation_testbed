@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars:
+    project_name: project
+    project_admin_name: "{{ project_name }}_admin"
+    project_reader_name: eval
+    project_users: ["project_admin_name","project_reader_name"]
+  tasks:
+  - name: Authenticate as project admin
+    os_auth:
+      cloud: project_admin
+  - name: Delete image "ubuntu-18.04-minimal"
+    os_image:
+      cloud: project_admin
+      state: absent
+      name: ubuntu-18.04-minimal
+  - name: Delete image "ubuntu-18.04-server"
+    os_image:
+      cloud: project_admin
+      state: absent
+      name: ubuntu-18.04-server
+  - name: Authenticate as admin
+    os_auth:
+      cloud: admin
+  - name: Delete project "{{ project_name }}"
+    os_project:
+      cloud: admin
+      state: absent
+      name: "{{ project_name }}"
+  - name: Delete project users
+    os_user:
+      cloud: admin
+      state: absent
+      name: "{{ item }}"
+    loop: project_users
