@@ -1,22 +1,29 @@
 ---
 - hosts: localhost
   gather_facts: False
+  vars:
+    project_name: test
+    member_names: [fabio,jaff]
+    member_password: password
+    reader_name: eval
+    reader_password: eval
   tasks:
-  - name: Create project 'test'
+  - name: Create project '{{ project_name }}'
     os_project:
       state: present
-      name: test
-      description: Test project
+      name: {{ project_name }}
       domain: default
       enabled: True
-  - name: Create user 'eval'
+  - name: Create project member '{{ item }}'
     os_user:
       state: present
-      name: eval
-      password: eval
+      name: {{ item }}
+      password: {{ member_password }}
       domain: default
-  - name: Grant a 'reader' role on the user 'eval' in the project 'test'
+    loop: {{ member_names }}
+  - name: Grant member role on the user '{{ item }}' in the project '{{ project_name }}'
     os_user_role:
-      user: eval
-      role: reader
-      project: test
+      user: {{ item }}
+      role: member
+      project: {{ project_name }}
+    loop: {{ member_names }}
