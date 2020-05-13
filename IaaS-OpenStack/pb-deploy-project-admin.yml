@@ -41,5 +41,4 @@
       name: "{{ instance_name }}"
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
-      nics:
-        - net-name: "{{ private_subnet_name }}"
+      network: "{{ private_subnet_name }}"
