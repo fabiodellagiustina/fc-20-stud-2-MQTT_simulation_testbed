@@ -6,7 +6,7 @@
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
-    instance_name: "nv1"
+    instance_name: "nvm1"
   tasks:
   - name: Authenticate as project admin
     os_auth:
@@ -41,4 +41,4 @@
       name: "{{ instance_name }}"
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
-      network: "{{ private_subnet_name }}"
+      network: "{{ private_network_name }}"

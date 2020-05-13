@@ -5,7 +5,7 @@
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
-    instance_name: "nv1"
+    instance_name: "nvm1"
   tasks:
   - name: Delete instance "{{ instance_name }}"
     os_server:
