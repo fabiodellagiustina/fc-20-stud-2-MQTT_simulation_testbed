@@ -86,6 +86,3 @@
       vcpus: 1
       ram: 1024
       disk: 5
-  - name: Authenticate as project admin
-    os_auth:
-      cloud: project_admin

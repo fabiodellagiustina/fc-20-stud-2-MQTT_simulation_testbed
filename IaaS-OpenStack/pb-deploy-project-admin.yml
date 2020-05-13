@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+  - name: Authenticate as project admin
+    os_auth:
+      cloud: project_admin
