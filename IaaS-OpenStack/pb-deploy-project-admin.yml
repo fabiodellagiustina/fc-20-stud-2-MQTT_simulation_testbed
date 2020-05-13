@@ -34,7 +34,7 @@
       network: "{{ public_network_name }}"
       interfaces:
         - "{{ private_subnet_name }}"
-  - name: Create instance "{{ instance_name }}" attached to internal subnet "{{ private_subnet_name }}"
+  - name: Create instance "{{ instance_name }}" attached to network "{{ private_network_name }}"
     os_server:
       cloud: project_admin
       state: present
