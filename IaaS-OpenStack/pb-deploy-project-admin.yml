@@ -27,9 +27,9 @@
        - 1.0.0.1
   - name: Create router "{{ router_name }}" attached to external network "{{ public_network_name }}" and internal subnet "{{ private_network_name }}-subnet"
     os_router:
-    cloud: project_admin
-    state: present
-    name: "{{ router_name }}"
-    network: "{{ public_network_name }}"
-    interfaces:
-      - "{{ private_network_name }}-subnet"
+      cloud: project_admin
+      state: present
+      name: "{{ router_name }}"
+      network: "{{ public_network_name }}"
+      interfaces:
+        - "{{ private_network_name }}-subnet"
