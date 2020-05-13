@@ -1,7 +1,20 @@
 ---
 - hosts: localhost
   gather_facts: False
+  vars:
+    private_network_name: private
+    private_subnet_name: "{{ private_network_name }}-subnet"
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
+  - name: Delete subnet "{{ private_subnet_name }}"
+    os_subnet:
+      cloud: project_admin
+      state: absent
+      name: "{{ private_subnet_name }}"
+  - name: Delete network "{{ private_network_name }}"
+    os_network:
+      cloud: project_admin
+      state: absent
+      name: "{{ private_network_name }}"
