@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+  - name: Authenticate as project admin
+    os_auth:
+      cloud: project_admin
+  - name: Delete image "ubuntu-18.04-minimal"
+    os_image:
+      cloud: project_admin
+      state: absent
+      name: ubuntu-18.04-minimal
+  - name: Delete image "ubuntu-18.04-server"
+    os_image:
+      cloud: project_admin
+      state: absent
+      name: ubuntu-18.04-server
