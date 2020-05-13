@@ -21,3 +21,13 @@
       state: absent
       name: "{{ item }}"
     loop: "{{ project_users }}"
+  - name: Delete image "ubuntu-18.04-minimal"
+    os_image:
+      cloud: admin
+      state: absent
+      name: ubuntu-18.04-minimal
+  - name: Delete image "ubuntu-18.04-server"
+    os_image:
+      cloud: admin
+      state: absent
+      name: ubuntu-18.04-server
