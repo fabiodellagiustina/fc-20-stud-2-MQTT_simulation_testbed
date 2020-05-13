@@ -3,7 +3,7 @@
   gather_facts: False
   vars:
     project_name: project
-    project_admin_name: {{ project_name }}_admin
+    project_admin_name: "{{ project_name }}_admin"
     project_admin_password: password
     project_reader_name: eval
     project_reader_password: eval
