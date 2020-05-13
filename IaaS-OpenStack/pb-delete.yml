@@ -1,12 +1,21 @@
 ---
 - hosts: localhost
   gather_facts: False
+  vars:
+    project_name: test
+    member_names: [fabio,jaff]
+    reader_name: eval
   tasks:
-  - name: Delete project test
+  - name: Delete project "{{ project_name }}"
     os_project:
       state: absent
-      name: test
-  - name: Delete user eval
+      name: "{{ project_name }}"
+  - name: Delete project members
     os_user:
       state: absent
-      name: eval
+      name: "{{ item }}"
+    loop: "{{ member_names }}"
+- name: Delete project reader
+  os_user:
+    state: absent
+    name: "{{ reader_name }}"

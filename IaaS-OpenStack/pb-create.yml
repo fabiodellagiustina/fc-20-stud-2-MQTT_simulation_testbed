@@ -14,16 +14,27 @@
       name: "{{ project_name }}"
       domain: default
       enabled: True
-  - name: Create project member "{{ item }}"
+  - name: Create project members
     os_user:
       state: present
       name: "{{ item }}"
       password: "{{ member_password }}"
       domain: default
     loop: "{{ member_names }}"
-  - name: Grant member role on the user "{{ item }}" in the project "{{ project_name }}"
+  - name: Grant member role on the project members
     os_user_role:
       user: "{{ item }}"
       role: member
       project: "{{ project_name }}"
     loop: "{{ member_names }}"
+  - name: Create project reader
+    os_user:
+      state: present
+      name: "{{ reader_name }}"
+      password: "{{ reader_password }}"
+      domain: default
+  - name: Grant reader role on the reader member
+    os_user_role:
+      user: "{{ reader_name }}"
+      role: member
+      project: "{{ project_name }}"
