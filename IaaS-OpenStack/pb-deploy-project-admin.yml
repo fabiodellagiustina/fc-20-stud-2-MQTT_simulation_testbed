@@ -8,13 +8,18 @@
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
-  - name: Delete subnet "{{ private_subnet_name }}"
-    os_subnet:
-      cloud: project_admin
-      state: absent
-      name: "{{ private_subnet_name }}"
-  - name: Delete network "{{ private_network_name }}"
+  - name: Create private network "{{ private_network_name }}"
     os_network:
       cloud: project_admin
-      state: absent
+      state: present
       name: "{{ private_network_name }}"
+  - name: Create subnet "{{ private_subnet_name }}" on network "{{ private_network_name }}"
+    os_subnet:
+      cloud: project_admin
+      state: present
+      network_name: "{{ private_network_name }}"
+      name: "{{ private_subnet_name }}"
+      cidr: 10.0.0.0/24
+      dns_nameservers:
+       - 1.1.1.1
+       - 1.0.0.1
