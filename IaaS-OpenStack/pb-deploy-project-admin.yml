@@ -25,7 +25,7 @@
       dns_nameservers:
        - 1.1.1.1
        - 1.0.0.1
-  - name: Create router "{{ router_name }}" attached to external network "{{ public_network_name }}" and internal subnet "{{ private_network_name }}-subnet"
+  - name: Create router "{{ router_name }}" attached to external network "{{ public_network_name }}" and internal subnet "{{ private_subnet_name }}"
     os_router:
       cloud: project_admin
       state: present
