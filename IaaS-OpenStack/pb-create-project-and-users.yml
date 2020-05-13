@@ -10,7 +10,7 @@
   tasks:
   - name: Authenticate as admin
     os_auth:
-      cloud: clouds.yaml
+      cloud: admin
   - name: Create project "{{ project_name }}"
     os_project:
       cloud:
