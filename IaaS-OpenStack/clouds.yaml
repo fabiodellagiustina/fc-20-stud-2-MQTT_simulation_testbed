@@ -4,4 +4,5 @@ clouds:
       auth_url: http://10.235.1.102/identity
       username: admin
       password: password
-      project_name: admin
+      user_domain_name: Default
+      project_domain_name: Default
