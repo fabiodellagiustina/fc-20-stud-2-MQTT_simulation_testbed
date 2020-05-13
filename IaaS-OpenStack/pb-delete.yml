@@ -3,7 +3,7 @@
   gather_facts: False
   vars:
     project_name: test
-    member_names: [fabio,jaff]
+    member_names: [test-admin,fabio,jaff]
     reader_name: eval
   tasks:
   - name: Delete project "{{ project_name }}"
