@@ -8,6 +8,9 @@
     project_reader_name: eval
     project_reader_password: eval
   tasks:
+  - name: Authenticate as admin
+    os_auth:
+      cloud: admin
   - name: Create project "{{ project_name }}"
     os_project:
       cloud: admin
@@ -28,3 +31,6 @@
       user: "{{ project_admin_name }}"
       role: member
       project: "{{ project_name }}"
+  - name: Authenticate as project admin
+    os_auth:
+      cloud: project_admin
