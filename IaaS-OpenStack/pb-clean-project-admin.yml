@@ -5,7 +5,13 @@
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
+    instance_name: "nv1"
   tasks:
+  - name: Delete instance "{{ instance_name }}"
+    os_server:
+      cloud: project_admin
+      state: absent
+      name: "{{ instance_name }}"
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin

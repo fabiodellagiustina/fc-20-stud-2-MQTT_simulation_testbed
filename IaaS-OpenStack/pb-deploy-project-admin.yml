@@ -6,6 +6,7 @@
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
+    instance_name: "nv1"
   tasks:
   - name: Authenticate as project admin
     os_auth:
@@ -32,4 +33,13 @@
       name: "{{ router_name }}"
       network: "{{ public_network_name }}"
       interfaces:
-        - "{{ private_network_name }}-subnet"
+        - "{{ private_subnet_name }}"
+  - name: Create instance "{{ instance_name }}" attached to internal subnet "{{ private_subnet_name }}"
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ instance_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      nics:
+        - net-name: "{{ private_subnet_name }}"
