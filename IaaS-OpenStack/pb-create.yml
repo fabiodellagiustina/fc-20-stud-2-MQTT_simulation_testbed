@@ -4,7 +4,7 @@
   vars:
     project_name: test
     member_names:
-      - "{{ project_name }}"_admin
+      - "{{ project_name }}"-admin
       - fabio
       - jaff
     member_password: password
