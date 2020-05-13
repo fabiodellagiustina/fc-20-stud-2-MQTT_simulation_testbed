@@ -15,7 +15,7 @@
       state: absent
       name: "{{ item }}"
     loop: "{{ member_names }}"
-- name: Delete project reader
-  os_user:
-    state: absent
-    name: "{{ reader_name }}"
+  - name: Delete project reader
+    os_user:
+      state: absent
+      name: "{{ reader_name }}"
