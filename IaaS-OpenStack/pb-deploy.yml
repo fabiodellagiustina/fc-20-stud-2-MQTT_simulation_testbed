@@ -31,6 +31,19 @@
       user: "{{ project_admin_name }}"
       role: member
       project: "{{ project_name }}"
+  - name: Create user "{{ project_reader_name }}"
+    os_user:
+      cloud: admin
+      state: present
+      name: "{{ project_reader_name }}"
+      password: "{{ project_reader_password }}"
+      domain: default
+  - name: Grant reader role on the user "{{ project_reader_name }}" in the project "{{ project_name }}"
+    os_user_role:
+      cloud: admin
+      user: "{{ project_reader_name }}"
+      role: reader
+      project: "{{ project_name }}"
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
