@@ -13,7 +13,7 @@
       cloud: admin
       state: present
       name: "{{ project_name }}"
-      domain_id: default
+      domain: default
       enabled: True
   - name: Create user "{{ project_admin_name }}"
     os_user:
@@ -21,7 +21,7 @@
       state: present
       name: "{{ project_admin_name }}"
       password: "{{ project_admin_password }}"
-      domain_id: default
+      domain: default
   - name: Grant member role on the user "{{ project_admin_name }}" in the project "{{ project_name }}"
     os_user_role:
       cloud: admin
