@@ -1,6 +1,0 @@
-clouds:
-  admin:
-    auth:
-      auth_url: http://10.235.1.102/identity
-      username: admin
-      password: password
