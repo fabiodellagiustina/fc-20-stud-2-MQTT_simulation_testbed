@@ -33,4 +33,4 @@
       cloud: admin
       state: absent
       name: "{{ item }}"
-    loop: project_users
+    loop: "{{ project_users }}"
