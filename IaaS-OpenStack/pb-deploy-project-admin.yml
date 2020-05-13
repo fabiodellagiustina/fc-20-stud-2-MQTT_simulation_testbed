@@ -2,8 +2,10 @@
 - hosts: localhost
   gather_facts: False
   vars:
+    public_network_name: public
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
+    router_name: "router1"
   tasks:
   - name: Authenticate as project admin
     os_auth:
@@ -23,3 +25,11 @@
       dns_nameservers:
        - 1.1.1.1
        - 1.0.0.1
+  - name: Create router "{{ router_name }}" attached to external network "{{ public_network_name }}" and internal subnet "{{ private_network_name }}-subnet"
+    os_router:
+    cloud: project_admin
+    state: present
+    name: "{{ router_name }}"
+    network: "{{ public_network_name }}"
+    interfaces:
+      - "{{ private_network_name }}-subnet"
