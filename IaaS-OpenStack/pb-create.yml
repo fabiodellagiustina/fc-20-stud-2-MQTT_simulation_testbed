@@ -11,19 +11,19 @@
   - name: Create project '{{ project_name }}'
     os_project:
       state: present
-      name: {{ project_name }}
+      name: "{{ project_name }}"
       domain: default
       enabled: True
   - name: Create project member '{{ item }}'
     os_user:
       state: present
-      name: {{ item }}
-      password: {{ member_password }}
+      name: "{{ item }}"
+      password: "{{ member_password }}"
       domain: default
-    loop: {{ member_names }}
+    loop: "{{ member_names }}"
   - name: Grant member role on the user '{{ item }}' in the project '{{ project_name }}'
     os_user_role:
-      user: {{ item }}
+      user: "{{ item }}"
       role: member
-      project: {{ project_name }}
-    loop: {{ member_names }}
+      project: "{{ project_name }}"
+    loop: "{{ member_names }}"
