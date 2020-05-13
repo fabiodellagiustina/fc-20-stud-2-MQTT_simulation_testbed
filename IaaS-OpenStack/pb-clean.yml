@@ -10,17 +10,17 @@
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
-      ignore_errors: yes
+      ignore_errors: True
   - name: Delete image "ubuntu-18.04-minimal"
     os_image:
       cloud: project_admin
-      ignore_errors: yes
+      ignore_errors: True
       state: absent
       name: ubuntu-18.04-minimal
   - name: Delete image "ubuntu-18.04-server"
     os_image:
       cloud: project_admin
-      ignore_errors: yes
+      ignore_errors: True
       state: absent
       name: ubuntu-18.04-server
   - name: Authenticate as admin
