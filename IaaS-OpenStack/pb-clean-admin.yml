@@ -6,6 +6,7 @@
     project_admin_name: "{{ project_name }}_admin"
     project_reader_name: eval
     project_users: ["{{ project_admin_name }}","{{ project_reader_name }}"]
+    images: [ubuntu-18.04-minimal,ubuntu-18.04-server]
   tasks:
   - name: Authenticate as admin
     os_auth:
@@ -15,19 +16,15 @@
       cloud: admin
       state: absent
       name: "{{ project_name }}"
-  - name: Delete project users
+  - name: Delete users
     os_user:
       cloud: admin
       state: absent
       name: "{{ item }}"
     loop: "{{ project_users }}"
-  - name: Delete image "ubuntu-18.04-minimal"
+  - name: Delete images
     os_image:
       cloud: admin
       state: absent
       name: ubuntu-18.04-minimal
-  - name: Delete image "ubuntu-18.04-server"
-    os_image:
-      cloud: admin
-      state: absent
-      name: ubuntu-18.04-server
+    loop: "{{ images }}"
