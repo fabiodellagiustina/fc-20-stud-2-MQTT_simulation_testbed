@@ -10,8 +10,8 @@ clouds:
   project_admin:
     auth:
       auth_url: http://10.235.1.102/identity
-      username: "{{ project_admin_name }}"
-      password: "{{ project_admin_password }}"
-      project_name: "{{ project_name }}"
+      username: project_admin
+      password: password
+      project_name: project
       user_domain_name: Default
       project_domain_name: Default
