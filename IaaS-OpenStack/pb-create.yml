@@ -3,7 +3,7 @@
   gather_facts: False
   vars:
     project_name: test
-    member_names: [fabio,jaff]
+    member_names: ["{{ project_name }}"_admin,fabio,jaff]
     member_password: password
     reader_name: eval
     reader_password: eval
