@@ -4,10 +4,16 @@
   vars:
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
+    router_name: "router1"
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
+  - name: Delete router "{{ router_name }}"
+    os_router:
+      cloud: project_admin
+      state: absent
+      name: "{{ router_name }}"
   - name: Delete subnet "{{ private_subnet_name }}"
     os_subnet:
       cloud: project_admin
