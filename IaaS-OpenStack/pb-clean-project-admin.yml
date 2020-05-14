@@ -21,6 +21,21 @@
       cloud: project_admin
       state: absent
       name: "{{ mqttbroker_name }}"
+  - name: Delete security group "ping-in"
+    os_security_group:
+      cloud: project_admin
+      state: absent
+      name: ping-in
+  - name: Delete security group "web-in"
+    os_security_group:
+      cloud: project_admin
+      state: absent
+      name: web-in
+  - name: Delete security group "mqtt-in"
+    os_security_group:
+      cloud: project_admin
+      state: absent
+      name: mqtt-in
   - name: Delete router "{{ router_name }}"
     os_router:
       cloud: project_admin
