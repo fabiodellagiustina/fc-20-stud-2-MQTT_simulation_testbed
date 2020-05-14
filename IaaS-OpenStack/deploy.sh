@@ -17,5 +17,5 @@ openstack --os-cloud admin floating ip create \
   --project project \
   public
 
-echo 'Deploying network, router and instances as "project_admin"'
+echo 'Deploying network, router, security groups and instances as "project_admin"'
 ansible-playbook pb-deploy-project-admin.yml

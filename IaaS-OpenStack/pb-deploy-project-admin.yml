@@ -37,6 +37,34 @@
       network: "{{ public_network_name }}"
       interfaces:
         - "{{ private_subnet_name }}"
+  - name: Create security group "icmp-in"
+    os_security_group:
+      cloud: project_admin
+      state: present
+      name: icmp-in
+      description: Allow ICMP in ingrees
+  - name: Create security group rule for ICMP in ingress
+    os_security_group_rule:
+      cloud: project_admin
+      state: present
+      security_group: icmp-in
+      protocol: icmp
+      remote_ip_prefix: 0.0.0.0/0
+  - name: Create security group "http-in"
+    os_security_group:
+      cloud: project_admin
+      state: present
+      name: http-in
+      description: Allow HTTP in ingrees
+  - name: Create security group rule for HTTP in ingress
+    os_security_group_rule:
+      cloud: project_admin
+      state: present
+      security_group: http-in
+      protocol: tcp
+      port_range_min: 80
+      port_range_max: 80
+      remote_ip_prefix: 0.0.0.0/0
   - name: Create instance "{{ webserver_name }}" attached to network "{{ private_network_name }}"
     os_server:
       cloud: project_admin
@@ -45,6 +73,9 @@
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
+      security_groups:
+        - icmp-in
+        - http-in
       auto_ip: False
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
     os_floating_ip:
@@ -60,6 +91,8 @@
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
+      security_groups:
+        - icmp-in
       auto_ip: False
   - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
     os_floating_ip:
