@@ -42,4 +42,4 @@
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
-      floating_ips: 172.24.4.100
+      auto_ip: False
