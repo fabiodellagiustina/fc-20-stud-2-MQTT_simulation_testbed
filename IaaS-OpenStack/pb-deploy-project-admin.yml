@@ -37,33 +37,66 @@
       network: "{{ public_network_name }}"
       interfaces:
         - "{{ private_subnet_name }}"
-  - name: Create security group "icmp-in"
+  - name: Create security group "ping-in"
     os_security_group:
       cloud: project_admin
       state: present
-      name: icmp-in
+      name: ping-in
       description: Allow ICMP in ingress
   - name: Create security group rule for ICMP in ingress
     os_security_group_rule:
       cloud: project_admin
       state: present
-      security_group: icmp-in
+      security_group: ping-in
       protocol: icmp
       remote_ip_prefix: 0.0.0.0/0
-  - name: Create security group "http-in"
+  - name: Create security group "web-in"
     os_security_group:
       cloud: project_admin
       state: present
-      name: http-in
-      description: Allow HTTP in ingress
+      name: web-in
+      description: Allow HTTP and HTTPS in ingress
   - name: Create security group rule for HTTP in ingress
     os_security_group_rule:
       cloud: project_admin
       state: present
-      security_group: http-in
+      security_group: web-in
       protocol: tcp
       port_range_min: 80
       port_range_max: 80
+      remote_ip_prefix: 0.0.0.0/0
+  - name: Create security group rule for HTTPS in ingress
+    os_security_group_rule:
+      cloud: project_admin
+      state: present
+      security_group: web-in
+      protocol: tcp
+      port_range_min: 443
+      port_range_max: 443
+      remote_ip_prefix: 0.0.0.0/0
+  - name: Create security group "mqtt-in"
+    os_security_group:
+      cloud: project_admin
+      state: present
+      name: mqtt-in
+      description: Allow MQTT in ingress
+  - name: Create security group rule for MQTT in ingress
+    os_security_group_rule:
+      cloud: project_admin
+      state: present
+      security_group: mqtt-in
+      protocol: tcp
+      port_range_min: 1883
+      port_range_max: 1883
+      remote_ip_prefix: 0.0.0.0/0
+  - name: Create security group rule for MQTT over TLS in ingress
+    os_security_group_rule:
+      cloud: project_admin
+      state: present
+      security_group: mqtt-in
+      protocol: tcp
+      port_range_min: 8883
+      port_range_max: 8883
       remote_ip_prefix: 0.0.0.0/0
   - name: Create instance "{{ webserver_name }}" attached to network "{{ private_network_name }}"
     os_server:
@@ -74,8 +107,8 @@
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
       security_groups:
-        - icmp-in
-        - http-in
+        - ping-in
+        - web-in
       auto_ip: False
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
     os_floating_ip:
@@ -92,7 +125,8 @@
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
       security_groups:
-        - icmp-in
+        - ping-in
+        - mqtt-in
       auto_ip: False
   - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
     os_floating_ip:
