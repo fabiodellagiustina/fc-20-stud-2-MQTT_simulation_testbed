@@ -45,6 +45,7 @@
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
+      auto_ip: False
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
     os_floating_ip:
       cloud: project_admin
@@ -59,6 +60,7 @@
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
+      auto_ip: False
   - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
     os_floating_ip:
       cloud: project_admin
