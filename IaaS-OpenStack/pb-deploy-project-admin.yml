@@ -42,7 +42,7 @@
       cloud: project_admin
       state: present
       name: icmp-in
-      description: Allow ICMP in ingrees
+      description: Allow ICMP in ingress
   - name: Create security group rule for ICMP in ingress
     os_security_group_rule:
       cloud: project_admin
@@ -55,7 +55,7 @@
       cloud: project_admin
       state: present
       name: http-in
-      description: Allow HTTP in ingrees
+      description: Allow HTTP in ingress
   - name: Create security group rule for HTTP in ingress
     os_security_group_rule:
       cloud: project_admin
