@@ -6,8 +6,10 @@
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
-    instance_name: "nvm1"
-    instance_fip: 172.24.4.100
+    webserver_name: "web-server"
+    webserver_fip: 172.24.4.100
+    mqttbroker_name: "mqtt-broker"
+    mqttbroker_fip: 172.24.4.101
   tasks:
   - name: Authenticate as project admin
     os_auth:
@@ -35,17 +37,31 @@
       network: "{{ public_network_name }}"
       interfaces:
         - "{{ private_subnet_name }}"
-  - name: Create instance "{{ instance_name }}" attached to network "{{ private_network_name }}"
+  - name: Create instance "{{ webserver_name }}" attached to network "{{ private_network_name }}"
     os_server:
       cloud: project_admin
       state: present
-      name: "{{ instance_name }}"
+      name: "{{ webserver_name }}"
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
-  - name: Assign floating IP "{{ instance_fip }}" to instance "{{ instance_name }}"
+  - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
     os_floating_ip:
       cloud: project_admin
       state: present
-      floating_ip_address: "{{ instance_fip }}"
-      server: "{{ instance_name }}"
+      floating_ip_address: "{{ webserver_fip }}"
+      server: "{{ webserver_name }}"
+  - name: Create instance "{{ mqttbroker_name }}" attached to network "{{ private_network_name }}"
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ mqttbroker_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      network: "{{ private_network_name }}"
+  - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
+    os_floating_ip:
+      cloud: project_admin
+      state: present
+      floating_ip_address: "{{ mqttbroker_fip }}"
+      server: "{{ mqttbroker_name }}"

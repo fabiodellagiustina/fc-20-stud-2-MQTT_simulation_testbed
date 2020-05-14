@@ -5,17 +5,22 @@
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
-    instance_name: "nvm1"
+    webserver_name: "web-server"
+    mqttbroker_name: "mqtt-broker"
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
-  - name: Delete instance "{{ instance_name }}"
+  - name: Delete instance "{{ webserver_name }}"
     os_server:
       cloud: project_admin
       state: absent
-      name: "{{ instance_name }}"
-      delete_fip: True
+      name: "{{ webserver_name }}"
+  - name: Delete instance "{{ mqttbroker_name }}"
+    os_server:
+      cloud: project_admin
+      state: absent
+      name: "{{ mqttbroker_name }}"
   - name: Delete router "{{ router_name }}"
     os_router:
       cloud: project_admin
