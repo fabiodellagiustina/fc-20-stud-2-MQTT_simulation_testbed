@@ -15,6 +15,7 @@
       cloud: project_admin
       state: absent
       name: "{{ instance_name }}"
+      delete_fip: True
   - name: Delete router "{{ router_name }}"
     os_router:
       cloud: project_admin
