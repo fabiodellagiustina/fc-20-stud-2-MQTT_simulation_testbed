@@ -14,6 +14,8 @@
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
+
+  # network
   - name: Create private network "{{ private_network_name }}"
     os_network:
       cloud: project_admin
@@ -29,6 +31,8 @@
       dns_nameservers:
        - 1.1.1.1
        - 1.0.0.1
+
+  # router
   - name: Create router "{{ router_name }}" attached to external network "{{ public_network_name }}" and internal subnet "{{ private_subnet_name }}"
     os_router:
       cloud: project_admin
@@ -37,6 +41,16 @@
       network: "{{ public_network_name }}"
       interfaces:
         - "{{ private_subnet_name }}"
+
+  # key pair
+  - name: Create a key pair with Ubuntu user "eval"
+    os_keypair:
+      cloud: project_admin
+      state: present
+      name: eval
+      public_key_file: /home/eval/.ssh/id_rsa.pub
+
+  # security groups
   - name: Create security group "ping-in"
     os_security_group:
       cloud: project_admin
@@ -49,6 +63,21 @@
       state: present
       security_group: ping-in
       protocol: icmp
+      remote_ip_prefix: 0.0.0.0/0
+  - name: Create security group "ssh-in"
+    os_security_group:
+      cloud: project_admin
+      state: present
+      name: ssh-in
+      description: Allow SSH in ingress
+  - name: Create security group rule for SSH in ingress
+    os_security_group_rule:
+      cloud: project_admin
+      state: present
+      security_group: ssh-in
+      protocol: tcp
+      port_range_min: 22
+      port_range_max: 22
       remote_ip_prefix: 0.0.0.0/0
   - name: Create security group "web-in"
     os_security_group:
@@ -98,6 +127,8 @@
       port_range_min: 8883
       port_range_max: 8883
       remote_ip_prefix: 0.0.0.0/0
+
+  # instances
   - name: Create instance "{{ webserver_name }}" attached to network "{{ private_network_name }}"
     os_server:
       cloud: project_admin
@@ -106,8 +137,10 @@
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
+      key_name: eval
       security_groups:
         - ping-in
+        - ssh-in
         - web-in
       auto_ip: False
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
@@ -124,8 +157,10 @@
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
+      key_name: eval
       security_groups:
         - ping-in
+        - ssh-in
         - mqtt-in
       auto_ip: False
   - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
