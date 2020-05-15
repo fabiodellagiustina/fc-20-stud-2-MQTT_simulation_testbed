@@ -1,43 +1,28 @@
-const client = new Paho.MQTT.Client("172.24.4.101", Number(9001), "myClientId" + new Date().getTime());
-
-const myTopic = "test";
-
-client.onConnectionLost = onConnectionLost;
-client.onMessageArrived = onMessageArrived;
-
-client.connect({
+const client = new Paho.MQTT.Client("mqtt.eclipse.org", Number(443), "myClientId" + (new Date).getTime()),
+  myTopic = "test";
+client.onConnectionLost = onConnectionLost, client.onMessageArrived = onMessageArrived, client.connect({
   onSuccess: onConnect
 });
-
 let count = 0;
 
 function onConnect() {
-  console.log("onConnect");
-  client.subscribe(myTopic);
-  setInterval(() => {
+  console.log("onConnect"), client.subscribe(myTopic), setInterval(() => {
     publish(myTopic, `The count is now ${count++}`)
-  }, 1000)
-
+  }, 1e3)
 }
 
-function onConnectionLost(responseObject) {
-  if (responseObject.errorCode !== 0) {
-    console.log("onConnectionLost:" + responseObject.errorMessage);
-  }
-  client.connect({
+function onConnectionLost(n) {
+  0 !== n.errorCode && console.log("onConnectionLost:" + n.errorMessage), client.connect({
     onSuccess: onConnect
-  });
+  })
 }
+const publish = (n, e) => {
+  console.log("desint :", n, "msggg", e);
+  let o = new Paho.MQTT.Message(e);
+  o.destinationName = n, client.send(o)
+};
 
-const publish = (dest, msg) => {
-  console.log('desint :', dest, 'msggg', msg)
-  let message = new Paho.MQTT.Message(msg);
-  message.destinationName = dest;
-  client.send(message);
-}
-
-function onMessageArrived(message) {
-  let el = document.createElement('div')
-  el.innerHTML = message.payloadString
-  document.body.appendChild(el)
+function onMessageArrived(n) {
+  let e = document.createElement("div");
+  e.innerHTML = n.payloadString, document.body.appendChild(e)
 }
