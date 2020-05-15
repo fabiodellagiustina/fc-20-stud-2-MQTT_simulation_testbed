@@ -20,7 +20,7 @@
       cloud: project_admin
       state: absent
       name: "{{ item }}"
-    loop: instances
+    loop: "{{ instances }}"
 
   # security groups
   - name: Delete security groups
@@ -28,7 +28,7 @@
       cloud: project_admin
       state: absent
       name: "{{ item }}"
-    loop: security_groups
+    loop: "{{ security_groups }}"
 
   # key pair
   - name: Delete key pair "eval"
