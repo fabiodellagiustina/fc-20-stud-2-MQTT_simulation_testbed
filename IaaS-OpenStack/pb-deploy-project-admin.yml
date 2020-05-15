@@ -157,6 +157,7 @@
         apt-get update
         apt-get install -y apache2
         echo "<!doctype html><html lang="en"><head> <meta charset="utf-8"> <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script> <script src="https://raw.githubusercontent.com/fabiodellagiustina/fc-20-stud-2-MQTT_simulation_testbed/master/IaaS-OpenStack/mqtt.js" type="text/javascript"></script> <title>MQTT Demo</title></head><body> <h1>MQTT is awesome!</h1></body></html>" > /var/www/html/index.html
+        echo "const client=new Paho.MQTT.Client("172.24.4.101",Number(9001),"myClientId"+(new Date).getTime()),myTopic="test";client.onConnectionLost=onConnectionLost,client.onMessageArrived=onMessageArrived,client.connect({onSuccess:onConnect});let count=0;function onConnect(){console.log("onConnect"),client.subscribe(myTopic),setInterval(()=>{publish(myTopic,`The count is now ${count++}`)},1e3)}function onConnectionLost(n){0!==n.errorCode&&console.log("onConnectionLost:"+n.errorMessage),client.connect({onSuccess:onConnect})}const publish=(n,e)=>{console.log("desint :",n,"msggg",e);let o=new Paho.MQTT.Message(e);o.destinationName=n,client.send(o)};function onMessageArrived(n){let e=document.createElement("div");e.innerHTML=n.payloadString,document.body.appendChild(e)}" > /var/www/html/index.html
         {% endraw %}
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
     os_floating_ip:
