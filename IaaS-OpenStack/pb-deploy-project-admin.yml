@@ -50,7 +50,7 @@
       name: eval
       public_key_file: /home/eval/.ssh/id_rsa.pub
 
-  # security groups
+  # security groups and rules
   - name: Create security group "ping-in"
     os_security_group:
       cloud: project_admin
@@ -126,6 +126,15 @@
       protocol: tcp
       port_range_min: 8883
       port_range_max: 8883
+      remote_ip_prefix: 0.0.0.0/0
+  - name: Create security group rule for MQTT over WebSocket in ingress
+    os_security_group_rule:
+      cloud: project_admin
+      state: present
+      security_group: mqtt-in
+      protocol: tcp
+      port_range_min: 9001
+      port_range_max: 9001
       remote_ip_prefix: 0.0.0.0/0
 
   # instances
