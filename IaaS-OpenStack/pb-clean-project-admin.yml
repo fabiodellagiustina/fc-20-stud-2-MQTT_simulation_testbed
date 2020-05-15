@@ -7,44 +7,28 @@
     router_name: "router1"
     webserver_name: "web-server"
     mqttbroker_name: "mqtt-broker"
+    instances: ["{{ webserver_name }}","{{ mqttbroker_name }}"]
+    security_groups: [ping-in,ssh-in,web-in,mqtt-in]
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
 
   # instances
-  - name: Delete instance "{{ webserver_name }}"
+  - name: Delete instances
     os_server:
       cloud: project_admin
       state: absent
-      name: "{{ webserver_name }}"
-  - name: Delete instance "{{ mqttbroker_name }}"
-    os_server:
-      cloud: project_admin
-      state: absent
-      name: "{{ mqttbroker_name }}"
+      name: "{{ item }}"
+    loop: instances
 
   # security groups
-  - name: Delete security group "ping-in"
+  - name: Delete security groups
     os_security_group:
       cloud: project_admin
       state: absent
-      name: ping-in
-  - name: Delete security group "ssh-in"
-    os_security_group:
-      cloud: project_admin
-      state: absent
-      name: ssh-in
-  - name: Delete security group "web-in"
-    os_security_group:
-      cloud: project_admin
-      state: absent
-      name: web-in
-  - name: Delete security group "mqtt-in"
-    os_security_group:
-      cloud: project_admin
-      state: absent
-      name: mqtt-in
+      name: "{{ item }}"
+    loop: security_groups
 
   # key pair
   - name: Delete key pair "eval"
