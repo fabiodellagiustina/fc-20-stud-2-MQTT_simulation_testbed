@@ -171,7 +171,7 @@
         echo '</html>' >> /var/www/html/index.html
 
         echo 'const client = new Paho.MQTT.Client("172.24.4.101", Number(9001), "myClientId" + (new Date).getTime()),' > /var/www/html/mqtt.js
-        echo '  myTopic = "test";' >> /var/www/html/mqtt.js
+        echo '  myTopic = "#";' >> /var/www/html/mqtt.js
         echo 'client.onConnectionLost = onConnectionLost, client.onMessageArrived = onMessageArrived, client.connect({' >> /var/www/html/mqtt.js
         echo '  onSuccess: onConnect' >> /var/www/html/mqtt.js
         echo '});' >> /var/www/html/mqtt.js
