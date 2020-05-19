@@ -171,13 +171,13 @@
         echo '</html>' >> /var/www/html/index.html
 
         echo 'const client = new Paho.MQTT.Client("172.24.4.101", Number(9001), "myClientId" + (new Date).getTime()),' > /var/www/html/mqtt.js
-        echo '  myTopic = "#";' >> /var/www/html/mqtt.js
+        echo '  myTopic = "test";' >> /var/www/html/mqtt.js
         echo 'client.onConnectionLost = onConnectionLost, client.onMessageArrived = onMessageArrived, client.connect({' >> /var/www/html/mqtt.js
         echo '  onSuccess: onConnect' >> /var/www/html/mqtt.js
         echo '});' >> /var/www/html/mqtt.js
         echo 'let count = 0;' >> /var/www/html/mqtt.js
         echo 'function onConnect() {' >> /var/www/html/mqtt.js
-        echo '  console.log("onConnect"), client.subscribe(myTopic), setInterval(() => {' >> /var/www/html/mqtt.js
+        echo '  console.log("onConnect"), client.subscribe("#"), setInterval(() => {' >> /var/www/html/mqtt.js
         echo '    publish(myTopic, `The count is now ${count++}`)' >> /var/www/html/mqtt.js
         echo '  }, 1e3)' >> /var/www/html/mqtt.js
         echo '}' >> /var/www/html/mqtt.js
