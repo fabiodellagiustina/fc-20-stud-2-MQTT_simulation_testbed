@@ -195,6 +195,8 @@
         echo '  let e = document.createElement("div");' >> /var/www/html/mqtt.js
         echo '  e.innerHTML = n.payloadString, document.body.appendChild(e)' >> /var/www/html/mqtt.js
         echo '}' >> /var/www/html/mqtt.js
+
+        systemctl restart mosquitto
         {% endraw %}
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
     os_floating_ip:
