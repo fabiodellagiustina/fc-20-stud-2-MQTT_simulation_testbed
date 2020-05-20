@@ -84,27 +84,18 @@
         echo '</body>' >> /var/www/html/index.html
         echo '</html>' >> /var/www/html/index.html
 
-        echo 'const client = new Paho.MQTT.Client("172.24.4.101", Number(9001), "myClientId" + (new Date).getTime()),' > /var/www/html/mqtt.js
-        echo '  myTopic = "test";' >> /var/www/html/mqtt.js
+        echo 'const client = new Paho.MQTT.Client("172.24.4.101", Number(9001), "myClientId" + (new Date).getTime());' > /var/www/html/mqtt.js
         echo 'client.onConnectionLost = onConnectionLost, client.onMessageArrived = onMessageArrived, client.connect({' >> /var/www/html/mqtt.js
         echo '  onSuccess: onConnect' >> /var/www/html/mqtt.js
         echo '});' >> /var/www/html/mqtt.js
-        echo 'let count = 0;' >> /var/www/html/mqtt.js
         echo 'function onConnect() {' >> /var/www/html/mqtt.js
-        echo '  console.log("onConnect"), client.subscribe("#"), setInterval(() => {' >> /var/www/html/mqtt.js
-        echo '    publish(myTopic, `The count is now ${count++}`)' >> /var/www/html/mqtt.js
-        echo '  }, 1e3)' >> /var/www/html/mqtt.js
+        echo '  console.log("onConnect"), client.subscribe("#")' >> /var/www/html/mqtt.js
         echo '}' >> /var/www/html/mqtt.js
         echo 'function onConnectionLost(n) {' >> /var/www/html/mqtt.js
         echo '  0 !== n.errorCode && console.log("onConnectionLost:" + n.errorMessage), client.connect({' >> /var/www/html/mqtt.js
         echo '    onSuccess: onConnect' >> /var/www/html/mqtt.js
         echo '  })' >> /var/www/html/mqtt.js
         echo '}' >> /var/www/html/mqtt.js
-        echo 'const publish = (n, e) => {' >> /var/www/html/mqtt.js
-        echo '  console.log("desint :", n, "msggg", e);' >> /var/www/html/mqtt.js
-        echo '  let o = new Paho.MQTT.Message(e);' >> /var/www/html/mqtt.js
-        echo '  o.destinationName = n, client.send(o)' >> /var/www/html/mqtt.js
-        echo '};' >> /var/www/html/mqtt.js
         echo 'function onMessageArrived(n) {' >> /var/www/html/mqtt.js
         echo '  let e = document.createElement("div");' >> /var/www/html/mqtt.js
         echo '  e.innerHTML = n.payloadString, document.body.appendChild(e)' >> /var/www/html/mqtt.js
