@@ -1,0 +1,118 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars:
+    public_network_name: public
+    private_network_name: private
+    private_subnet_name: "{{ private_network_name }}-subnet"
+    router_name: "router1"
+    webserver_name: "web-server"
+    webserver_fip: 172.24.4.100
+    mqttbroker_name: "mqtt-broker"
+    mqttbroker_fip: 172.24.4.101
+  tasks:
+  - name: Authenticate as project admin
+    os_auth:
+      cloud: project_admin
+
+  # mqtt broker
+  - name: Create instance "{{ mqttbroker_name }}" attached to network "{{ private_network_name }}"
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ mqttbroker_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      network: "{{ private_network_name }}"
+      key_name: eval
+      security_groups:
+        - ping-in
+        - ssh-in
+        - mqtt-in
+      auto_ip: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y mosquitto
+
+        echo "listener 1883" >> /etc/mosquitto/mosquitto.conf
+        echo "protocol mqtt" >> /etc/mosquitto/mosquitto.conf
+        echo "listener 9001" >> /etc/mosquitto/mosquitto.conf
+        echo "protocol websockets" >> /etc/mosquitto/mosquitto.conf
+
+        systemctl stop mosquitto
+        sleep 3
+        systemctl start mosquitto
+        {% endraw %}
+  - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
+    os_floating_ip:
+      cloud: project_admin
+      state: present
+      floating_ip_address: "{{ mqttbroker_fip }}"
+      server: "{{ mqttbroker_name }}"
+
+  # web server
+  - name: Create instance "{{ webserver_name }}" attached to network "{{ private_network_name }}"
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ webserver_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      network: "{{ private_network_name }}"
+      key_name: eval
+      security_groups:
+        - ping-in
+        - ssh-in
+        - web-in
+      auto_ip: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y apache2
+
+        echo '<!doctype html>' > /var/www/html/index.html
+        echo '<html lang="en">' >> /var/www/html/index.html
+        echo '<head>' >> /var/www/html/index.html
+        echo '  <meta charset="utf-8">' >> /var/www/html/index.html
+        echo '  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>' >> /var/www/html/index.html
+        echo '  <script src="mqtt.js" type="text/javascript"></script>' >> /var/www/html/index.html
+        echo '  <title>MQTT Demo</title>' >> /var/www/html/index.html
+        echo '</head>' >> /var/www/html/index.html
+        echo '<body>' >> /var/www/html/index.html
+        echo '  <h1>MQTT is awesome!</h1>' >> /var/www/html/index.html
+        echo '</body>' >> /var/www/html/index.html
+        echo '</html>' >> /var/www/html/index.html
+
+        echo 'const client = new Paho.MQTT.Client("172.24.4.101", Number(9001), "myClientId" + (new Date).getTime()),' > /var/www/html/mqtt.js
+        echo '  myTopic = "test";' >> /var/www/html/mqtt.js
+        echo 'client.onConnectionLost = onConnectionLost, client.onMessageArrived = onMessageArrived, client.connect({' >> /var/www/html/mqtt.js
+        echo '  onSuccess: onConnect' >> /var/www/html/mqtt.js
+        echo '});' >> /var/www/html/mqtt.js
+        echo 'let count = 0;' >> /var/www/html/mqtt.js
+        echo 'function onConnect() {' >> /var/www/html/mqtt.js
+        echo '  console.log("onConnect"), client.subscribe("#"), setInterval(() => {' >> /var/www/html/mqtt.js
+        echo '    publish(myTopic, `The count is now ${count++}`)' >> /var/www/html/mqtt.js
+        echo '  }, 1e3)' >> /var/www/html/mqtt.js
+        echo '}' >> /var/www/html/mqtt.js
+        echo 'function onConnectionLost(n) {' >> /var/www/html/mqtt.js
+        echo '  0 !== n.errorCode && console.log("onConnectionLost:" + n.errorMessage), client.connect({' >> /var/www/html/mqtt.js
+        echo '    onSuccess: onConnect' >> /var/www/html/mqtt.js
+        echo '  })' >> /var/www/html/mqtt.js
+        echo '}' >> /var/www/html/mqtt.js
+        echo 'const publish = (n, e) => {' >> /var/www/html/mqtt.js
+        echo '  console.log("desint :", n, "msggg", e);' >> /var/www/html/mqtt.js
+        echo '  let o = new Paho.MQTT.Message(e);' >> /var/www/html/mqtt.js
+        echo '  o.destinationName = n, client.send(o)' >> /var/www/html/mqtt.js
+        echo '};' >> /var/www/html/mqtt.js
+        echo 'function onMessageArrived(n) {' >> /var/www/html/mqtt.js
+        echo '  let e = document.createElement("div");' >> /var/www/html/mqtt.js
+        echo '  e.innerHTML = n.payloadString, document.body.appendChild(e)' >> /var/www/html/mqtt.js
+        echo '}' >> /var/www/html/mqtt.js
+        {% endraw %}
+  - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
+    os_floating_ip:
+      cloud: project_admin
+      state: present
+      floating_ip_address: "{{ webserver_fip }}"
+      server: "{{ webserver_name }}"

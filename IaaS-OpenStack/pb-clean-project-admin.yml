@@ -5,22 +5,11 @@
     private_network_name: private
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
-    webserver_name: "web-server"
-    mqttbroker_name: "mqtt-broker"
-    instances: ["{{ webserver_name }}","{{ mqttbroker_name }}"]
     security_groups: [ping-in,ssh-in,web-in,mqtt-in]
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
-
-  # instances
-  - name: Delete instances
-    os_server:
-      cloud: project_admin
-      state: absent
-      name: "{{ item }}"
-    loop: "{{ instances }}"
 
   # security groups
   - name: Delete security groups
