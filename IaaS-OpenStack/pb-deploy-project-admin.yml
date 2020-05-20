@@ -227,6 +227,7 @@
         echo "listener 9001" >> /etc/mosquitto/mosquitto.conf
         echo "protocol websockets" >> /etc/mosquitto/mosquitto.conf
         systemctl stop mosquitto
+        sleep 3
         systemctl start mosquitto
         {% endraw %}
   - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
