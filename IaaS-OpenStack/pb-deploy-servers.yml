@@ -7,7 +7,9 @@
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
     webserver_name: "web-server"
-    mqttbroker_name: "mqtt-broker"
+    mqttbroker1_name: "mqtt-broker-1"
+    mqttbroker2_name: "mqtt-broker-2"
+    mqttbrokers: ["{{ mqttbroker1_name }}","{{ mqttbroker2_name }}"]
     webserver_fip: 172.24.4.100
     mqttbroker_fip: 172.24.4.101
   tasks:
@@ -16,7 +18,7 @@
       cloud: project_admin
 
   # web server
-  - name: Create instance "{{ webserver_name }}" attached to network "{{ private_network_name }}"
+  - name: Create a web server attached to network "{{ private_network_name }}"
     os_server:
       cloud: project_admin
       state: present
@@ -67,12 +69,12 @@
         echo '}' >> /var/www/html/mqtt.js
         {% endraw %}
 
-  # mqtt broker
-  - name: Create instance "{{ mqttbroker_name }}" attached to network "{{ private_network_name }}"
+  # mqtt brokers
+  - name: Create 2 MQTT brokers attached to network "{{ private_network_name }}"
     os_server:
       cloud: project_admin
       state: present
-      name: "{{ mqttbroker_name }}"
+      name: "{{ item }}"
       image: ubuntu-18.04-minimal
       flavor: ubuntu.micro
       network: "{{ private_network_name }}"
@@ -97,6 +99,7 @@
         sleep 3
         systemctl start mosquitto
         {% endraw %}
+    loop: "{{ mqttbrokers }}"
 
   # floating ips
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
