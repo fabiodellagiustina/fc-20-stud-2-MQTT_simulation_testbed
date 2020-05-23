@@ -30,6 +30,7 @@
         - ssh-in
         - mqtt-in
       auto_ip: False
+      wait: False
       userdata: |
         {%- raw -%}#!/bin/bash
         apt-get update
@@ -66,6 +67,7 @@
         - ssh-in
         - web-in
       auto_ip: False
+      wait: False
       userdata: |
         {%- raw -%}#!/bin/bash
         apt-get update
