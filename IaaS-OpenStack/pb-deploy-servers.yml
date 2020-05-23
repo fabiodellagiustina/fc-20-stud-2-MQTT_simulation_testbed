@@ -7,50 +7,13 @@
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
     webserver_name: "web-server"
-    webserver_fip: 172.24.4.100
     mqttbroker_name: "mqtt-broker"
+    webserver_fip: 172.24.4.100
     mqttbroker_fip: 172.24.4.101
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
-
-  # mqtt broker
-  - name: Create instance "{{ mqttbroker_name }}" attached to network "{{ private_network_name }}"
-    os_server:
-      cloud: project_admin
-      state: present
-      name: "{{ mqttbroker_name }}"
-      image: ubuntu-18.04-minimal
-      flavor: ubuntu.micro
-      network: "{{ private_network_name }}"
-      key_name: eval
-      security_groups:
-        - ping-in
-        - ssh-in
-        - mqtt-in
-      auto_ip: False
-      wait: False
-      userdata: |
-        {%- raw -%}#!/bin/bash
-        apt-get update
-        apt-get install -y mosquitto
-
-        echo "listener 1883" >> /etc/mosquitto/mosquitto.conf
-        echo "protocol mqtt" >> /etc/mosquitto/mosquitto.conf
-        echo "listener 9001" >> /etc/mosquitto/mosquitto.conf
-        echo "protocol websockets" >> /etc/mosquitto/mosquitto.conf
-
-        systemctl stop mosquitto
-        sleep 3
-        systemctl start mosquitto
-        {% endraw %}
-  - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
-    os_floating_ip:
-      cloud: project_admin
-      state: present
-      floating_ip_address: "{{ mqttbroker_fip }}"
-      server: "{{ mqttbroker_name }}"
 
   # web server
   - name: Create instance "{{ webserver_name }}" attached to network "{{ private_network_name }}"
@@ -103,9 +66,48 @@
         echo '  e.innerHTML = n.payloadString, document.body.appendChild(e)' >> /var/www/html/mqtt.js
         echo '}' >> /var/www/html/mqtt.js
         {% endraw %}
+
+  # mqtt broker
+  - name: Create instance "{{ mqttbroker_name }}" attached to network "{{ private_network_name }}"
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ mqttbroker_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      network: "{{ private_network_name }}"
+      key_name: eval
+      security_groups:
+        - ping-in
+        - ssh-in
+        - mqtt-in
+      auto_ip: False
+      wait: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y mosquitto
+
+        echo "listener 1883" >> /etc/mosquitto/mosquitto.conf
+        echo "protocol mqtt" >> /etc/mosquitto/mosquitto.conf
+        echo "listener 9001" >> /etc/mosquitto/mosquitto.conf
+        echo "protocol websockets" >> /etc/mosquitto/mosquitto.conf
+
+        systemctl stop mosquitto
+        sleep 3
+        systemctl start mosquitto
+        {% endraw %}
+
+  # floating ips
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
     os_floating_ip:
       cloud: project_admin
       state: present
       floating_ip_address: "{{ webserver_fip }}"
       server: "{{ webserver_name }}"
+  - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ mqttbroker_name }}"
+    os_floating_ip:
+      cloud: project_admin
+      state: present
+      floating_ip_address: "{{ mqttbroker_fip }}"
+      server: "{{ mqttbroker_name }}"
