@@ -3,7 +3,7 @@
 kubectl apply -f mqttclient-deploy-press.yaml
 kubectl apply -f mqttclient-deploy-temp.yaml
 
-sleep 10
+sleep 30
 
 while true
 do
@@ -13,5 +13,5 @@ do
 	kubectl scale deployment mqtt-client-deployment-temperature --replicas=$replicanumbtemp
 	echo "Pressure replicas= $replicanumbpress"
 	echo "Temperature replicas= $replicanumbtemp"
-	sleep 10
+	sleep 30
 done
