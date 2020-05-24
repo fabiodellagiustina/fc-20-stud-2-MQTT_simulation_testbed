@@ -86,7 +86,7 @@
         - ip_address: "{{ database_ip }}"
 
   # web server
-  - name: Create web server"
+  - name: Create web server
     os_server:
       cloud: project_admin
       state: present
@@ -134,7 +134,7 @@
         {% endraw %}
 
   # mqtt brokers
-  - name: Create 2 MQTT brokers"
+  - name: Create 2 MQTT brokers
     os_server:
       cloud: project_admin
       state: present
@@ -162,7 +162,7 @@
     loop: "{{ mqttbrokers }}"
 
   # load balancer
-  - name: Create load balancer"
+  - name: Create load balancer
     os_server:
       cloud: project_admin
       state: present
@@ -175,7 +175,7 @@
       wait: False
 
   # database
-  - name: Create database"
+  - name: Create database
     os_server:
       cloud: project_admin
       state: present
