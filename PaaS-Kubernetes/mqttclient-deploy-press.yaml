@@ -4,7 +4,7 @@ metadata:
  name: mqtt-client-deployment-pressure
 spec:
  selector:
-  matchLabels: 
+  matchLabels:
    app: mqtt-client-pressure
  replicas: 2
  template:
@@ -16,5 +16,5 @@ spec:
    - name: mqtt-client-pressure
      image: aksakalli/mqtt-client
      command: ["bin/sh"]
-     args: ['-c', 'id=$(shuf -i 1000-9999 -n 1);topic="press";while true;do timestamp=$(date "+%Y/%m/%d %H:%M:%S");pressure=$(shuf -i 0-10 -n 1);message="$timestamp Device:$id  Pressure:$pressure bar";pub -h 172.24.4.101 -t "$topic" -m "$message";sleep $(shuf -i 3-5 -n 1);done']
+     args: ['-c', 'id=$(shuf -i 1000-9999 -n 1);topic="press";while true;do timestamp=$(date "+%Y/%m/%d %H:%M:%S");pressure=$(shuf -i 0-10 -n 1);message="$timestamp Device:$id  Pressure:$pressure bar";pub -h 172.24.4.101 -t "$topic" -m "$message";sleep 10;done']
      tty: true
