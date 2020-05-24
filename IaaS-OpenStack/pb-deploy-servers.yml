@@ -71,6 +71,8 @@
       security_groups:
         - ping-in
         - ssh-in
+        - web-in
+        - mqtt-in
       fixed_ips:
         - ip_address: "{{ loadbalancer_ip }}"
   - name: Create port with static IP "{{ database_ip }}" for "{{ database_name }}"
@@ -177,6 +179,28 @@
         {%- raw -%}#!/bin/bash
         apt-get update
         apt-get install -y haproxy
+
+        echo "frontend stats" >> /etc/haproxy/haproxy.cfg
+        echo "   bind *:80" >> /etc/haproxy/haproxy.cfg
+        echo "   stats uri /haproxy?stats" >> /etc/haproxy/haproxy.cfg
+        echo "listen mqtt" >> /etc/haproxy/haproxy.cfg
+        echo "  bind *:1883" >> /etc/haproxy/haproxy.cfg
+        echo "  mode tcp" >> /etc/haproxy/haproxy.cfg
+        echo "  option tcplog" >> /etc/haproxy/haproxy.cfg
+        echo "  balance leastconn" >> /etc/haproxy/haproxy.cfg
+        echo "  server mqtt-broker-1 10.0.0.101:1883 check" >> /etc/haproxy/haproxy.cfg
+        echo "  server mqtt-broker-2 10.0.0.102:1883 check" >> /etc/haproxy/haproxy.cfg
+        echo "listen mqtt_websocket" >> /etc/haproxy/haproxy.cfg
+        echo "  bind *:9001" >> /etc/haproxy/haproxy.cfg
+        echo "  mode tcp" >> /etc/haproxy/haproxy.cfg
+        echo "  option tcplog" >> /etc/haproxy/haproxy.cfg
+        echo "  balance leastconn" >> /etc/haproxy/haproxy.cfg
+        echo "  server mqtt-broker-1 10.0.0.101:9001 check" >> /etc/haproxy/haproxy.cfg
+        echo "  server mqtt-broker-2 10.0.0.102:9001 check" >> /etc/haproxy/haproxy.cfg
+
+        systemctl stop haproxy
+        sleep 3
+        systemctl start haproxy
         {% endraw %}
 
   # database
