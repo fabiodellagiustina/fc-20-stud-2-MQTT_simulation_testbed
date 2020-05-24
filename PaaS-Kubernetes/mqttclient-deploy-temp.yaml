@@ -6,7 +6,7 @@ spec:
  selector:
   matchLabels:
    app: mqtt-client-temperature
- replicas: 100
+ replicas: 50
  template:
   metadata:
    labels:
