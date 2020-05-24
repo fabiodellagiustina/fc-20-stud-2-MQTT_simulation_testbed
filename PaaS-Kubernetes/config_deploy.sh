@@ -7,8 +7,8 @@ sleep 10
 
 while true
 do
-	replicanumbpress=$(shuf -i 20-40 -n 1)
-	replicanumbtemp=$(shuf -i 20-40 -n 1)
+	replicanumbpress=$(shuf -i 90-100 -n 1)
+	replicanumbtemp=$(shuf -i 90-100 -n 1)
 	kubectl scale deployment mqtt-client-deployment-pressure --replicas=$replicanumbpress
 	kubectl scale deployment mqtt-client-deployment-temperature --replicas=$replicanumbtemp
 	echo "Pressure replicas= $replicanumbpress"
