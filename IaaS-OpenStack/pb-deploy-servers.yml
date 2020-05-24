@@ -26,49 +26,67 @@
       cloud: project_admin
 
   # ports
-  - name: Create port with a static IP for "{{ webserver_name }}"
+  - name: Create port with static IP "{{ webserver_ip }}" for "{{ webserver_name }}"
     os_port:
       cloud: project_admin
       state: present
       name: "{{ webserver_name }}-port"
       network: "{{ private_network_name }}"
+      security_groups:
+        - ping-in
+        - ssh-in
+        - web-in
       fixed_ips:
         - ip_address: "{{ webserver_ip }}"
-  - name: Create port with a static IP for "{{ mqttbroker1_name }}"
+  - name: Create port with static IP "{{ mqttbroker1_ip }}" for "{{ mqttbroker1_name }}"
     os_port:
       cloud: project_admin
       state: present
       name: "{{ mqttbroker1_name }}-port"
       network: "{{ private_network_name }}"
+      security_groups:
+        - ping-in
+        - ssh-in
+        - mqtt-in
       fixed_ips:
         - ip_address: "{{ mqttbroker1_ip }}"
-  - name: Create port with a static IP for "{{ mqttbroker2_name }}"
+  - name: Create port with static IP "{{ mqttbroker2_ip }}" for "{{ mqttbroker2_name }}"
     os_port:
       cloud: project_admin
       state: present
       name: "{{ mqttbroker2_name }}-port"
       network: "{{ private_network_name }}"
+      security_groups:
+        - ping-in
+        - ssh-in
+        - mqtt-in
       fixed_ips:
         - ip_address: "{{ mqttbroker2_ip }}"
-  - name: Create port with a static IP for "{{ loadbalancer_name }}"
+  - name: Create port with static IP "{{ loadbalancer_ip }}" for "{{ loadbalancer_name }}"
     os_port:
       cloud: project_admin
       state: present
       name: "{{ loadbalancer_name }}-port"
       network: "{{ private_network_name }}"
+      security_groups:
+        - ping-in
+        - ssh-in
       fixed_ips:
         - ip_address: "{{ loadbalancer_ip }}"
-  - name: Create port with a static IP for "{{ database_name }}"
+  - name: Create port with static IP "{{ database_ip }}" for "{{ database_name }}"
     os_port:
       cloud: project_admin
       state: present
       name: "{{ database_name }}-port"
       network: "{{ private_network_name }}"
+      security_groups:
+        - ping-in
+        - ssh-in
       fixed_ips:
         - ip_address: "{{ database_ip }}"
 
   # web server
-  - name: Create a web server attached to network "{{ private_network_name }}"
+  - name: Create web server"
     os_server:
       cloud: project_admin
       state: present
@@ -77,10 +95,6 @@
       flavor: ubuntu.micro
       nics: "port-name={{ webserver_name }}-port"
       key_name: eval
-      security_groups:
-        - ping-in
-        - ssh-in
-        - web-in
       auto_ip: False
       wait: False
       userdata: |
@@ -120,7 +134,7 @@
         {% endraw %}
 
   # mqtt brokers
-  - name: Create 2 MQTT brokers attached to network "{{ private_network_name }}"
+  - name: Create 2 MQTT brokers"
     os_server:
       cloud: project_admin
       state: present
@@ -129,10 +143,6 @@
       flavor: ubuntu.micro
       nics: "port-name={{ item }}-port"
       key_name: eval
-      security_groups:
-        - ping-in
-        - ssh-in
-        - mqtt-in
       auto_ip: False
       wait: False
       userdata: |
@@ -152,7 +162,7 @@
     loop: "{{ mqttbrokers }}"
 
   # load balancer
-  - name: Create a load balancer attached to network "{{ private_network_name }}"
+  - name: Create load balancer"
     os_server:
       cloud: project_admin
       state: present
@@ -161,14 +171,11 @@
       flavor: ubuntu.micro
       nics: "port-name={{ loadbalancer_name }}-port"
       key_name: eval
-      security_groups:
-        - ping-in
-        - ssh-in
       auto_ip: False
       wait: False
 
   # database
-  - name: Create a database attached to network "{{ private_network_name }}"
+  - name: Create database"
     os_server:
       cloud: project_admin
       state: present
@@ -177,9 +184,6 @@
       flavor: ubuntu.micro
       nics: "port-name={{ database_name }}-port"
       key_name: eval
-      security_groups:
-        - ping-in
-        - ssh-in
       auto_ip: False
       wait: False
 
