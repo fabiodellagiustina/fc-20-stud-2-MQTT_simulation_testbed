@@ -31,7 +31,7 @@
       cloud: project_admin
       state: present
       name: "{{ webserver_name }}-port"
-      network: "{{ private_subnet_name }}"
+      network: "{{ private_network_name }}"
       fixed_ips:
         - ip_address: "{{ webserver_ip }}"
   - name: Create port with a static IP for "{{ mqttbroker1_name }}"
@@ -39,7 +39,7 @@
       cloud: project_admin
       state: present
       name: "{{ mqttbroker1_name }}-port"
-      network: "{{ private_subnet_name }}"
+      network: "{{ private_network_name }}"
       fixed_ips:
         - ip_address: "{{ mqttbroker1_ip }}"
   - name: Create port with a static IP for "{{ mqttbroker2_name }}"
@@ -47,7 +47,7 @@
       cloud: project_admin
       state: present
       name: "{{ mqttbroker2_name }}-port"
-      network: "{{ private_subnet_name }}"
+      network: "{{ private_network_name }}"
       fixed_ips:
         - ip_address: "{{ mqttbroker2_ip }}"
   - name: Create port with a static IP for "{{ loadbalancer_name }}"
@@ -55,7 +55,7 @@
       cloud: project_admin
       state: present
       name: "{{ loadbalancer_name }}-port"
-      network: "{{ private_subnet_name }}"
+      network: "{{ private_network_name }}"
       fixed_ips:
         - ip_address: "{{ loadbalancer_ip }}"
   - name: Create port with a static IP for "{{ database_name }}"
@@ -63,7 +63,7 @@
       cloud: project_admin
       state: present
       name: "{{ database_name }}-port"
-      network: "{{ private_subnet_name }}"
+      network: "{{ private_network_name }}"
       fixed_ips:
         - ip_address: "{{ database_ip }}"
 
