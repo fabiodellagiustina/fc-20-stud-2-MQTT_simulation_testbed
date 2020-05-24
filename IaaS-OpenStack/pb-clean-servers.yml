@@ -3,8 +3,11 @@
   gather_facts: False
   vars:
     webserver_name: "web-server"
-    mqttbroker_name: "mqtt-broker"
-    instances: ["{{ webserver_name }}","{{ mqttbroker_name }}"]
+    mqttbroker1_name: "mqtt-broker-1"
+    mqttbroker2_name: "mqtt-broker-2"
+    loadbalancer_name: "load-balancer"
+    database_name: "database"
+    instances: ["{{ webserver_name }}","{{ mqttbroker1_name }}","{{ mqttbroker2_name }}","{{ loadbalancer_name }}","{{ database_name }}"]
   tasks:
   - name: Authenticate as project admin
     os_auth:
