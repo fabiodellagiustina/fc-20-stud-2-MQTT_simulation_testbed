@@ -173,6 +173,11 @@
       key_name: eval
       auto_ip: False
       wait: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y haproxy
+        {% endraw %}
 
   # database
   - name: Create database
