@@ -215,6 +215,12 @@
       key_name: eval
       auto_ip: False
       wait: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y python3-pip
+        pip3 install paho-mqtt
+        {% endraw %}
 
   # floating ips
   - name: Assign floating IP "{{ webserver_fip }}" to instance "{{ webserver_name }}"
