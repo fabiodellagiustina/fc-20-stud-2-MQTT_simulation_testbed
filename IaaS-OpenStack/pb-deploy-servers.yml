@@ -226,7 +226,7 @@
         echo '' >> /home/ubuntu/messages.sql
         echo 'DROP TABLE IF EXISTS messages;' >> /home/ubuntu/messages.sql
         echo 'CREATE TABLE messages (' >> /home/ubuntu/messages.sql
-        echo '  timestamp   timestamp DEFAULT CURRENT_TIMESTAMP,/home/ubuntu/' >> messages.sql
+        echo '  timestamp   timestamp DEFAULT CURRENT_TIMESTAMP,' >> /home/ubuntu/messages.sql
         echo '  topic       text NOT NULL,' >> /home/ubuntu/messages.sql
         echo '  qos         tinyint(1) NOT NULL,' >> /home/ubuntu/messages.sql
         echo '  message     text NOT NULL' >> /home/ubuntu/messages.sql
@@ -234,9 +234,9 @@
         echo '' >> /home/ubuntu/messages.sql
         echo 'DROP TABLE IF EXISTS settings;' >> /home/ubuntu/messages.sql
         echo 'CREATE TABLE settings (' >> /home/ubuntu/messages.sql
-        echo '  setting     varchar(8) NOT NULL PRIMARY KEY,' >/home/ubuntu/> messages.sql
+        echo '  setting     varchar(8) NOT NULL PRIMARY KEY,' >> /home/ubuntu/messages.sql
         echo '  state       tinyint(1) NOT NULL,' >> /home/ubuntu/messages.sql
-        echo '  timestamp   timestamp DEFAULT CURRENT_TIMESTA/home/ubuntu/MP ON UPDATE CURRENT_TIMESTAMP' >> messages.sql
+        echo '  timestamp   timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' >> /home/ubuntu/messages.sql
         echo ') ENGINE=InnoDB DEFAULT CHARSET=utf8;' >> /home/ubuntu/messages.sql
 
         mysql < /home/ubuntu/messages.sql
