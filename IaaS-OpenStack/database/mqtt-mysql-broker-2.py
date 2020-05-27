@@ -16,7 +16,7 @@
 #   return all logged topics as JSON data
 # <sub_prefix>/select/<topic>[%] [<minutes ago>|latest]
 #   return logged topic data as JSON
-# <sub_prefix>/setting/unique [0|1]
+# <sub_prefix>/setting/unique2 [0|1]
 #   set or return a setting
 #
 # **** Start of user configuration values
@@ -101,13 +101,13 @@ def on_message(client, userdata, msg):
           topic = part[2]
           with con:
             cur = con.cursor()
-            unique = 1
+            unique2 = 1
             try:
               history = int(msg.payload) * 60
               timestamp = datetime.datetime.fromtimestamp(time.time()-history).strftime('%Y-%m-%d %H:%M:%S')
               cur.execute("SELECT DISTINCT topic FROM messages \
                 WHERE topic LIKE %s AND timestamp > %s", (topic+"%", timestamp,))
-              unique = cur.rowcount
+              unique2 = cur.rowcount
               cur.execute("SELECT timestamp, topic, message FROM messages \
                 WHERE topic LIKE %s AND timestamp > %s ORDER BY timestamp ASC LIMIT 1000", (topic+"%", timestamp,))
             except:
@@ -120,7 +120,7 @@ def on_message(client, userdata, msg):
               jsonnext = ""
               for row in rows:
                 payload = payload + jsonnext + '{"time":"' + str(row[0]) +'"'
-                if unique == 1 and S_UNIQUE != 0:
+                if unique2 == 1 and S_UNIQUE != 0:
                   topic = str(row[1])
                 else:
                   payload = payload + ',"topic":"' + str(row[1]) + '"'
@@ -156,11 +156,11 @@ def on_message(client, userdata, msg):
             state = "0"
             if str(msg.payload)[0] != "0":
               state = "1"
-            if myset[0] == "unique":
+            if myset[0] == "unique2":
               S_UNIQUE = update_setting(myset[0], state)
 
           else:     # Get
-            if myset[0] == "unique":
+            if myset[0] == "unique2":
               payload = str(get_setting(myset[0], F_UNIQUE))
               feedback = 1
 
@@ -198,7 +198,7 @@ while mainloop == 1:
       time.sleep(60)
       pass
 
-  S_UNIQUE = get_setting("unique", F_UNIQUE)
+  S_UNIQUE = get_setting("unique2", F_UNIQUE)
 
   rc = 1
   while rc == 1:
