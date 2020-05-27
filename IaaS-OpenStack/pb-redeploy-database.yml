@@ -47,7 +47,7 @@
 
         mysql < /home/ubuntu/messages.sql
 
-        echo "FLUSH PRIVILEGES;"" > /home/ubuntu/reset-password.sql
+        echo "FLUSH PRIVILEGES;" > /home/ubuntu/reset-password.sql
         echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';" >> /home/ubuntu/reset-password.sql
         echo "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';" >> /home/ubuntu/reset-password.sql
 
