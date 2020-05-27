@@ -1,0 +1,54 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars:
+    database_name: "database"
+  tasks:
+  - name: Delete database
+    os_server:
+      cloud: project_admin
+      state: absent
+      name: "{{ database_name }}"
+
+  - name: Create database
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ database_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      nics: "port-name={{ database_name }}-port"
+      key_name: eval
+      auto_ip: False
+      wait: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y mysql-server python3-pip python3-mysqldb
+        pip3 install paho-mqtt
+
+        echo 'FLUSH PRIVILEGES;' > /home/ubuntu/reset-password.sql
+        echo 'ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';' >> /home/ubuntu/reset-password.sql
+
+        mysql < /home/ubuntu/reset-password.sql
+
+        echo 'CREATE DATABASE mqtt;' > /home/ubuntu/messages.sql
+        echo 'USE mqtt;' >> /home/ubuntu/messages.sql
+        echo '' >> /home/ubuntu/messages.sql
+        echo 'DROP TABLE IF EXISTS messages;' >> /home/ubuntu/messages.sql
+        echo 'CREATE TABLE messages (' >> /home/ubuntu/messages.sql
+        echo '  timestamp   timestamp DEFAULT CURRENT_TIMESTAMP,' >> /home/ubuntu/messages.sql
+        echo '  topic       text NOT NULL,' >> /home/ubuntu/messages.sql
+        echo '  qos         tinyint(1) NOT NULL,' >> /home/ubuntu/messages.sql
+        echo '  message     text NOT NULL' >> /home/ubuntu/messages.sql
+        echo ') ENGINE=InnoDB DEFAULT CHARSET=utf8;' >> /home/ubuntu/messages.sql
+        echo '' >> /home/ubuntu/messages.sql
+        echo 'DROP TABLE IF EXISTS settings;' >> /home/ubuntu/messages.sql
+        echo 'CREATE TABLE settings (' >> /home/ubuntu/messages.sql
+        echo '  setting     varchar(8) NOT NULL PRIMARY KEY,' >> /home/ubuntu/messages.sql
+        echo '  state       tinyint(1) NOT NULL,' >> /home/ubuntu/messages.sql
+        echo '  timestamp   timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' >> /home/ubuntu/messages.sql
+        echo ') ENGINE=InnoDB DEFAULT CHARSET=utf8;' >> /home/ubuntu/messages.sql
+
+        mysql < /home/ubuntu/messages.sql
+        {% endraw %}
