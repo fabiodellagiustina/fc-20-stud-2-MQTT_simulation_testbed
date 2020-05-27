@@ -218,7 +218,7 @@
       userdata: |
         {%- raw -%}#!/bin/bash
         apt-get update
-        apt-get install -y git python3-pip
+        apt-get install -y git python3-pip python3-mysqldb
         pip3 install paho-mqtt
         {% endraw %}
 
