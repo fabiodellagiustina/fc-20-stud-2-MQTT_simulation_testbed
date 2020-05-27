@@ -4,7 +4,7 @@
   vars:
     webserver_name: "web-server"
   tasks:
-  - name: Delete webserver
+  - name: Delete web server
     os_server:
       cloud: project_admin
       state: absent
