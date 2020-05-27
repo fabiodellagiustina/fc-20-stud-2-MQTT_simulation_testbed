@@ -218,6 +218,8 @@
       userdata: |
         {%- raw -%}#!/bin/bash
         apt-get update
+        apt-get install -y git python3-pip
+        pip3 install paho-mqtt
         {% endraw %}
 
   # floating ips
