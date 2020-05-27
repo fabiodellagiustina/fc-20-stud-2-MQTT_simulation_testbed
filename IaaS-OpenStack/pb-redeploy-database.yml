@@ -30,12 +30,12 @@
         git clone https://github.com/fabiodellagiustina/fc-20-stud-2-MQTT_simulation_testbed.git
         cd fc-20-stud-2-MQTT_simulation_testbed/IaaS-OpenStack/database
 
-        mysql < /home/ubuntu/messages.sql
+        mysql < fc-20-stud-2-MQTT_simulation_testbed/IaaS-OpenStack/database/messages.sql
 
-        echo "FLUSH PRIVILEGES;" > /home/ubuntu/reset-password.sql
-        echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';" >> /home/ubuntu/reset-password.sql
+        echo "FLUSH PRIVILEGES;" > reset-password.sql
+        echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';" >> reset-password.sql
 
-        mysql < /home/ubuntu/reset-password.sql
+        mysql < reset-password.sql
 
         python3 mqtt-mysql-broker-1.py &
         python3 mqtt-mysql-broker-2.py &
