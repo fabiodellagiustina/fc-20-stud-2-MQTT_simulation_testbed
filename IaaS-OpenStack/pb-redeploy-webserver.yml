@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars:
+    webserver_name: "web-server"
+  tasks:
+  - name: Delete webserver
+    os_server:
+      cloud: project_admin
+      state: absent
+      name: "{{ webserver_name }}"
+
+  - name: Create web server
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ webserver_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      nics: "port-name={{ webserver_name }}-port"
+      key_name: eval
+      auto_ip: False
+      wait: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y git apache2
+
+        git clone https://github.com/fabiodellagiustina/fc-20-stud-2-MQTT_simulation_testbed.git
+        cp fc-20-stud-2-MQTT_simulation_testbed/IaaS-OpenStack/webserver/index.html /var/www/html/index.html
+        cp fc-20-stud-2-MQTT_simulation_testbed/IaaS-OpenStack/webserver/mqtt.js /var/www/html/mqtt.js
+        {% endraw %}
