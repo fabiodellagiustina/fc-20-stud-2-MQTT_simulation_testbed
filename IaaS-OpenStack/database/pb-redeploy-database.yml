@@ -1,0 +1,42 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars:
+    database_name: "database"
+  tasks:
+  - name: Delete database
+    os_server:
+      cloud: project_admin
+      state: absent
+      name: "{{ database_name }}"
+
+  - name: Create database
+    os_server:
+      cloud: project_admin
+      state: present
+      name: "{{ database_name }}"
+      image: ubuntu-18.04-minimal
+      flavor: ubuntu.micro
+      nics: "port-name={{ database_name }}-port"
+      key_name: eval
+      auto_ip: False
+      wait: False
+      userdata: |
+        {%- raw -%}#!/bin/bash
+        apt-get update
+        apt-get install -y git mysql-server python3-pip python3-mysqldb
+        pip3 install paho-mqtt
+
+        git clone https://github.com/fabiodellagiustina/fc-20-stud-2-MQTT_simulation_testbed.git
+        cd fc-20-stud-2-MQTT_simulation_testbed/IaaS-OpenStack/database
+
+        mysql < /home/ubuntu/messages.sql
+
+        echo "FLUSH PRIVILEGES;" > /home/ubuntu/reset-password.sql
+        echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';" >> /home/ubuntu/reset-password.sql
+
+        mysql < /home/ubuntu/reset-password.sql
+
+        python3 mqtt-mysql-broker-1.py &
+        python3 mqtt-mysql-broker-2.py &
+        {% endraw %}
