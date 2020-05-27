@@ -27,11 +27,6 @@
         apt-get install -y mysql-server python3-pip python3-mysqldb
         pip3 install paho-mqtt
 
-        echo 'FLUSH PRIVILEGES;' > /home/ubuntu/reset-password.sql
-        echo 'ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';' >> /home/ubuntu/reset-password.sql
-
-        mysql < /home/ubuntu/reset-password.sql
-
         echo 'CREATE DATABASE mqtt;' > /home/ubuntu/messages.sql
         echo 'USE mqtt;' >> /home/ubuntu/messages.sql
         echo '' >> /home/ubuntu/messages.sql
@@ -51,4 +46,9 @@
         echo ') ENGINE=InnoDB DEFAULT CHARSET=utf8;' >> /home/ubuntu/messages.sql
 
         mysql < /home/ubuntu/messages.sql
+
+        echo 'FLUSH PRIVILEGES;' > /home/ubuntu/reset-password.sql
+        echo 'ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';' >> /home/ubuntu/reset-password.sql
+
+        mysql < /home/ubuntu/reset-password.sql
         {% endraw %}
