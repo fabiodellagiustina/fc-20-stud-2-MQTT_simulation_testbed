@@ -7,12 +7,12 @@ This project aims to implement a testbed to simulate the communication among Int
 MQTT (Message Queuing Telemetry Transport) is a well-known lightweight messaging protocol designed for machine-to-machine (M2M) and IoT communications. It defines two types of network entities: message brokers (usually one) and many clients. An MQTT broker is a server that receives all the messages sent by clients connected to it and reroutes them to other clients. An MQTT client is any device connected to the broker that sends or receives (or both) MQTT messages. When a client wants to send a message, a "topic" must be specified (it publishes a message on a topic). The broker will redirect that message to all clients subscribed to that topic.
 
 ## Scenario
-The scenario we want to recreate consists of a variable number of **IoT devices** (one or more sensor networks) connected to a cloud service (Figure 1). The cloud service provides message brokers for **data collection**, a database for **data storage** and a web server for **data visualization**. In particular, it provides two MQTT brokers and a load balancer to ensure service availability in case of message overload or broker failure. Finally, data are going to be accessible online through the web server.
+The scenario we want to recreate consists of a variable number of **IoT devices** (one or more sensor networks) connected to a cloud service. The cloud service provides message brokers for **data collection**, a database for **data storage** and a web server for **data visualization**. In particular, it provides two MQTT brokers and a load balancer to ensure service availability in case of message overload or broker failure. Finally, data are going to be accessible online through the web server.
 
 ![alt text](dataflow.png "Dataflow")
 
 ## Architecture
-The architecture consists of two machines, one to simulate the IoT devices and one the cloud service (Figure 2). Both machines are part of the same network that simulates the Internet.
+The architecture consists of two machines, one to simulate the IoT devices and one the cloud service. Both machines are part of the same network that simulates the Internet.
 
 ![alt text](architecture.png "Architecture")
 
