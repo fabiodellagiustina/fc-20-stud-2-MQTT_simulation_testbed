@@ -3,7 +3,7 @@
 echo 'Cleaning instances as "project_admin"'
 ansible-playbook -v pb-clean-servers.yml
 
-echo 'Cleaning network, router and security groups as "project_admin"'
+echo 'Cleaning ports, security groups, router, network and key pair as "project_admin"'
 ansible-playbook -v pb-clean-project-admin.yml
 
 echo 'Releasing floating IP "172.24.4.100"'

@@ -7,85 +7,17 @@
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
     webserver_name: "web-server"
-    webserver_ip: "10.0.0.100"
     mqttbroker1_name: "mqtt-broker-1"
-    mqttbroker1_ip: "10.0.0.101"
     mqttbroker2_name: "mqtt-broker-2"
-    mqttbroker2_ip: "10.0.0.102"
     mqttbrokers: ["{{ mqttbroker1_name }}","{{ mqttbroker2_name }}"]
     loadbalancer_name: "load-balancer"
-    loadbalancer_ip: "10.0.0.105"
     database_name: "database"
-    database_ip: "10.0.0.110"
-    instances: ["{{ webserver_name }}","{{ mqttbroker1_name }}","{{ mqttbroker2_name }}","{{ loadbalancer_name }}","{{ database_name }}"]
     webserver_fip: 172.24.4.100
     mqttbroker_fip: 172.24.4.101
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
-
-  # ports
-  - name: Create port with static IP "{{ webserver_ip }}" for "{{ webserver_name }}"
-    os_port:
-      cloud: project_admin
-      state: present
-      name: "{{ webserver_name }}-port"
-      network: "{{ private_network_name }}"
-      security_groups:
-        - ping-in
-        - ssh-in
-        - web-in
-      fixed_ips:
-        - ip_address: "{{ webserver_ip }}"
-  - name: Create port with static IP "{{ mqttbroker1_ip }}" for "{{ mqttbroker1_name }}"
-    os_port:
-      cloud: project_admin
-      state: present
-      name: "{{ mqttbroker1_name }}-port"
-      network: "{{ private_network_name }}"
-      security_groups:
-        - ping-in
-        - ssh-in
-        - mqtt-in
-      fixed_ips:
-        - ip_address: "{{ mqttbroker1_ip }}"
-  - name: Create port with static IP "{{ mqttbroker2_ip }}" for "{{ mqttbroker2_name }}"
-    os_port:
-      cloud: project_admin
-      state: present
-      name: "{{ mqttbroker2_name }}-port"
-      network: "{{ private_network_name }}"
-      security_groups:
-        - ping-in
-        - ssh-in
-        - mqtt-in
-      fixed_ips:
-        - ip_address: "{{ mqttbroker2_ip }}"
-  - name: Create port with static IP "{{ loadbalancer_ip }}" for "{{ loadbalancer_name }}"
-    os_port:
-      cloud: project_admin
-      state: present
-      name: "{{ loadbalancer_name }}-port"
-      network: "{{ private_network_name }}"
-      security_groups:
-        - ping-in
-        - ssh-in
-        - web-in
-        - mqtt-in
-      fixed_ips:
-        - ip_address: "{{ loadbalancer_ip }}"
-  - name: Create port with static IP "{{ database_ip }}" for "{{ database_name }}"
-    os_port:
-      cloud: project_admin
-      state: present
-      name: "{{ database_name }}-port"
-      network: "{{ private_network_name }}"
-      security_groups:
-        - ping-in
-        - ssh-in
-      fixed_ips:
-        - ip_address: "{{ database_ip }}"
 
   # web server
   - name: Create web server

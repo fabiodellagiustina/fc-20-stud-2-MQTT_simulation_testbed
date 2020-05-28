@@ -11,6 +11,8 @@
   - name: Authenticate as admin
     os_auth:
       cloud: admin
+
+  # project
   - name: Create project "{{ project_name }}"
     os_project:
       cloud: admin
@@ -18,6 +20,8 @@
       name: "{{ project_name }}"
       domain: default
       enabled: True
+
+  # users
   - name: Create user "{{ project_admin_name }}"
     os_user:
       cloud: admin
@@ -44,6 +48,8 @@
       user: "{{ project_reader_name }}"
       role: reader
       project: "{{ project_name }}"
+
+  # images
   - name: Upload image "ubuntu-18.04-minimal"
     os_image:
       cloud: admin
@@ -66,6 +72,8 @@
       is_public: True
       min_disk: 2
       min_ram: 512
+
+  # flavors
   - name: Create flavor "ubuntu.micro"
     os_nova_flavor:
       cloud: admin
