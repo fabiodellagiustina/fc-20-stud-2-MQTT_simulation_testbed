@@ -13,7 +13,10 @@
     loadbalancer_name: "load-balancer"
     database_name: "database"
     webserver_fip: 172.24.4.100
-    mqttbroker_fip: 172.24.4.101
+    mqttbroker1_fip: 172.24.4.101
+    mqttbroker2_fip: 172.24.4.102
+    loadbalancer_fip: 172.24.4.105
+    database_fip: 172.24.4.110
   tasks:
   - name: Authenticate as project admin
     os_auth:
@@ -145,9 +148,27 @@
       state: present
       floating_ip_address: "{{ webserver_fip }}"
       server: "{{ webserver_name }}"
-  - name: Assign floating IP "{{ mqttbroker_fip }}" to instance "{{ loadbalancer_name }}"
+  - name: Assign floating IP "{{ mqttbroker1_fip }}" to instance "{{ mqttbroker1_name }}"
     os_floating_ip:
       cloud: project_admin
       state: present
-      floating_ip_address: "{{ mqttbroker_fip }}"
+      floating_ip_address: "{{ mqttbroker1_fip }}"
+      server: "{{ mqttbroker1_name }}"
+  - name: Assign floating IP "{{ mqttbroker2_fip }}" to instance "{{ mqttbroker2_name }}"
+    os_floating_ip:
+      cloud: project_admin
+      state: present
+      floating_ip_address: "{{ mqttbroker2_fip }}"
+      server: "{{ mqttbroker2_name }}"
+  - name: Assign floating IP "{{ loadbalancer_fip }}" to instance "{{ loadbalancer_name }}"
+    os_floating_ip:
+      cloud: project_admin
+      state: present
+      floating_ip_address: "{{ loadbalancer_fip }}"
       server: "{{ loadbalancer_name }}"
+  - name: Assign floating IP "{{ database_fip }}" to instance "{{ database_name }}"
+    os_floating_ip:
+      cloud: project_admin
+      state: present
+      floating_ip_address: "{{ database_fip }}"
+      server: "{{ database_name }}"

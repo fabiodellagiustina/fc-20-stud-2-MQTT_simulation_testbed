@@ -12,5 +12,14 @@ openstack --os-cloud admin floating ip delete 172.24.4.100
 echo 'Releasing floating IP "172.24.4.101"'
 openstack --os-cloud admin floating ip delete 172.24.4.101
 
+echo 'Releasing floating IP "172.24.4.102"'
+openstack --os-cloud admin floating ip delete 172.24.4.102
+
+echo 'Releasing floating IP "172.24.4.105"'
+openstack --os-cloud admin floating ip delete 172.24.4.105
+
+echo 'Releasing floating IP "172.24.4.110"'
+openstack --os-cloud admin floating ip delete 172.24.4.110
+
 echo 'Cleaning project, users, images and flavors as "admin"'
 ansible-playbook pb-clean-admin.yml
