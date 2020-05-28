@@ -6,10 +6,19 @@
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
     security_groups: [ping-in,ssh-in,web-in,mqtt-in]
+    instances: ["{{ webserver_name }}","{{ mqttbroker1_name }}","{{ mqttbroker2_name }}","{{ loadbalancer_name }}","{{ database_name }}"]
   tasks:
   - name: Authenticate as project admin
     os_auth:
       cloud: project_admin
+
+  # ports
+  - name: Delete ports
+    os_port:
+      cloud: project_admin
+      state: absent
+      name: "{{ item }}-port"
+    loop: "{{ instances }}"
 
   # security groups
   - name: Delete security groups
@@ -18,13 +27,6 @@
       state: absent
       name: "{{ item }}"
     loop: "{{ security_groups }}"
-
-  # key pair
-  - name: Delete key pair "eval"
-    os_keypair:
-      cloud: project_admin
-      state: absent
-      name: eval
 
   # router
   - name: Delete router "{{ router_name }}"
@@ -44,3 +46,10 @@
       cloud: project_admin
       state: absent
       name: "{{ private_network_name }}"
+
+  # key pair
+  - name: Delete key pair "eval"
+    os_keypair:
+      cloud: project_admin
+      state: absent
+      name: eval
