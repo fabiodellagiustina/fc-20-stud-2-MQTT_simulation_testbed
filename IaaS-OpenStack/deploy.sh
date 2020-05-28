@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo 'Deploying project, users, images and flavors as "admin"'
-ansible-playbook -v pb-deploy-admin.yml
+ansible-playbook pb-deploy-admin.yml
 
 echo 'Allocating floating IP "172.24.4.100" to project "project"'
 openstack --os-cloud admin floating ip create \
@@ -18,7 +18,7 @@ openstack --os-cloud admin floating ip create \
   public
 
 echo 'Deploying key pair, network, router, security groups and ports as "project_admin"'
-ansible-playbook -v pb-deploy-project-admin.yml
+ansible-playbook pb-deploy-project-admin.yml
 
 echo 'Deploying instances as "project_admin"'
-ansible-playbook -v pb-deploy-servers.yml
+ansible-playbook pb-deploy-servers.yml
