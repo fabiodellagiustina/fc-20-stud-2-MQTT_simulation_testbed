@@ -1,1 +1,1 @@
-export KUBECONFIG="$(kind get kubeconfig-path --name=$USER)"
+export KUBECONFIG="$(kind get kubeconfig-path --name=eval)"
