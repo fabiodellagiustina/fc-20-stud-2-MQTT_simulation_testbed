@@ -6,6 +6,11 @@
     private_subnet_name: "{{ private_network_name }}-subnet"
     router_name: "router1"
     security_groups: [ping-in,ssh-in,web-in,mqtt-in]
+    webserver_name: "web-server"
+    mqttbroker1_name: "mqtt-broker-1"
+    mqttbroker2_name: "mqtt-broker-2"
+    loadbalancer_name: "load-balancer"
+    database_name: "database"
     instances: ["{{ webserver_name }}","{{ mqttbroker1_name }}","{{ mqttbroker2_name }}","{{ loadbalancer_name }}","{{ database_name }}"]
   tasks:
   - name: Authenticate as project admin
