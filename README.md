@@ -1,7 +1,7 @@
 # MQTT simulation testbed
 
-Della Giustina, Fabio - fabio.dellagiustina@studenti.unitn.it  
-Barcellesi, Jacopo - jacopo.barcellesi@studenti.unitn.it
+Della Giustina, Fabio (fabio.dellagiustina@studenti.unitn.it)  
+Barcellesi, Jacopo (jacopo.barcellesi@studenti.unitn.it)
 
 ## Introduction
 This project aims to implement a testbed to simulate the communication among Internet of Things (IoT) devices through an MQTT infrastructure.
