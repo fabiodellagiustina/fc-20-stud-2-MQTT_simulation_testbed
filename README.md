@@ -1,6 +1,7 @@
 # MQTT simulation testbed
 
 Della Giustina, Fabio - fabio.dellagiustina@studenti.unitn.it
+
 Barcellesi, Jacopo - jacopo.barcellesi@studenti.unitn.it
 
 ## Introduction
